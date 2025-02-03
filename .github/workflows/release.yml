@@ -34,3 +34,15 @@ jobs:
         with:
           files: ${{env.PACKAGE}}
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Release to releases.mondoo.com
+        uses: peter-evans/repository-dispatch@v3
+        env:
+          TARGET: https://github.com/sibuthomasmathew/ci-tests
+        with:
+          token: ${{ secrets.CI }}
+          repository: ${{ env.TARGET }}
+          event-type: release-triggered
+          client-payload: '{
+              "version": "${{  github.ref_name }}"
+            }'
